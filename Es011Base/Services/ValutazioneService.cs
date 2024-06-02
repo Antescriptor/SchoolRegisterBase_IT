@@ -1,20 +1,21 @@
-﻿using Es012Base.Models;
-using Es012Base.Stores;
-using Es012Base.Utils;
+﻿using Es013.Models;
+using Es013.Services.Interfaces;
+using Es013.Stores;
+using Es013.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Es012Base.Services
+namespace Es013.Services
 {
-	public class ValutazioneService
+	public class ValutazioneService : IValutazioneService
 	{
 		private readonly ValutazioneStore _valutazioneStore;
 		public ValutazioneService()
 		{
 			_valutazioneStore = new();
 		}
-		internal static decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
+		public static decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
 		{
 			if (valutazioni is not null && valutazioni.Count > 0)
 			{
@@ -32,7 +33,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal List<Valutazione>? Cerca(Docente? docente = null, Alunno? alunno = null, DateOnly? data = null, uint? anno = null, string? materia = null, string? classe = null, decimal? voto = null)
+		public List<Valutazione>? Cerca(Docente? docente = null, Alunno? alunno = null, DateOnly? data = null, uint? anno = null, string? materia = null, string? classe = null, decimal? voto = null)
 		{
 			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
 			if (valutazioni is not null && valutazioni.Count > 0)
@@ -58,7 +59,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal List<Valutazione>? FiltraPerDocenteAnnoMateriaClasse(Docente docente, uint? anno = null, string? materia = null, string? classe = null)
+		public List<Valutazione>? FiltraPerDocenteAnnoMateriaClasse(Docente docente, uint? anno = null, string? materia = null, string? classe = null)
 		{
 			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
 			if (valutazioni.Count > 0)
@@ -77,7 +78,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal List<ProiezioneValutazione>? FiltraECalcolaMediaPerMateria(Alunno? alunno = null, uint? anno = null)
+		public List<ProiezioneValutazione>? FiltraECalcolaMediaPerMateria(Alunno? alunno = null, uint? anno = null)
 		{
 			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
 			/* Tipo di restituzione decimale
@@ -114,7 +115,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal void InserisciValutazione(Docente docente, Alunno alunno)
+		public void InserisciValutazione(Docente docente, Alunno alunno)
 		{
 			DateTime? dataEOra = ImmissioneUtility.DataEOra();
 
@@ -133,11 +134,11 @@ namespace Es012Base.Services
 			decimal? voto = ImmissioneUtility.NumeroRazionale("voto");
 			_valutazioneStore.Inserisci(docente, alunno, dataEOra, materia, classe, voto);
 		}
-		internal Valutazione? OttieniValutazione(uint id)
+		public Valutazione? OttieniValutazione(uint id)
 		{
 			return _valutazioneStore.Ottieni(id);
 		}
-		internal void CancellaValutazione(uint id)
+		public void CancellaValutazione(uint id)
 		{
 			_valutazioneStore.Cancella(id);
 		}

@@ -1,19 +1,20 @@
-﻿using Es012Base.Utils;
-using Es012Base.Models;
+﻿using Es013.Utils;
+using Es013.Models;
 using System;
+using Es013.Services.Interfaces;
 
-namespace Es012Base.Services
+namespace Es013.Services
 {
-	public class RegistroService
+	public class RegistroService : IRegistroService
 	{
-		private DocenteService _docenteService;
-		private AlunnoService _alunnoService;
+		private readonly DocenteService _docenteService;
+		private readonly AlunnoService _alunnoService;
 		public RegistroService(DocenteService docenteService, AlunnoService alunnoService)
 		{
 			_docenteService = docenteService;
 			_alunnoService = alunnoService;
 		}
-		internal void Menu()
+		public void Menu()
 		{
 			bool verificaNumeroNaturale;
 			uint scelta;

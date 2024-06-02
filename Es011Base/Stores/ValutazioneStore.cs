@@ -1,28 +1,29 @@
-﻿using Es012Base.Models;
+﻿using Es013.Models;
+using Es013.Stores.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Es012Base.Stores
+namespace Es013.Stores
 {
-	internal class ValutazioneStore
+	public class ValutazioneStore : IValutazioneStore
 	{
 		private readonly List<Valutazione> valutazioni = new();
-		internal bool Inserisci(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
+		public bool Inserisci(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
 		{
 			Valutazione valutazioneDaAggiungere = new(docente, alunno, dataEOra, materia, classe, voto);
 			valutazioni.Add(valutazioneDaAggiungere);
 			return true;
 		}
-		internal List<Valutazione> Ottieni()
+		public List<Valutazione> Ottieni()
 		{
 			return valutazioni;
 		}
-		internal Valutazione? Ottieni(uint id)
+		public Valutazione? Ottieni(uint id)
 		{
 			return valutazioni.FirstOrDefault(v => v.Id == id);
 		}
-		internal static bool Aggiorna(Valutazione? valutazioneDaAggiornare, DateTime? data = null, decimal? voto = null)
+		public static bool Aggiorna(Valutazione? valutazioneDaAggiornare, DateTime? data = null, decimal? voto = null)
 		{
 			if (valutazioneDaAggiornare is not null)
 			{
@@ -35,7 +36,7 @@ namespace Es012Base.Stores
 				return false;
 			}
 		}
-		internal bool Cancella(uint id)
+		public bool Cancella(uint id)
 		{
 			Valutazione? valutazioneDaCancellare = valutazioni.FirstOrDefault(v => v.Id == id);
 			if (valutazioneDaCancellare is not null)

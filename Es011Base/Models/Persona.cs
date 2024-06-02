@@ -1,9 +1,10 @@
-﻿using Es012Base.Utils;
+﻿using Es013.Models.Interfaces;
+using Es013.Utils;
 using System;
 
-namespace Es012Base.Models
+namespace Es013.Models
 {
-	public abstract class Persona
+    public abstract class Persona : IPersona
 	{
 		public Persona(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null)
 		{
@@ -16,15 +17,15 @@ namespace Es012Base.Models
 			CodiceFiscale = codiceFiscale;
 			DataNascita = dataNascita;
 		}
-		internal static uint ContatoreMatricola { get; set; } = 0;
-		internal uint Matricola { get; }
-		internal string? Nome { get; set; }
-		internal string? Cognome { get; set; }
-		internal string? CodiceFiscale { get; set; }
-		internal DateOnly? DataNascita { get; set; }
+		public static uint ContatoreMatricola { get; private set; } = 0;
+		public uint Matricola { get; }
+		public string? Nome { get; set; }
+		public string? Cognome { get; set; }
+		public string? CodiceFiscale { get; set; }
+		public DateOnly? DataNascita { get; set; }
 
 		private readonly string _password;
-		internal bool ControllaPassword(string password)
+		public bool ControllaPassword(string password)
 		{
 			return password == _password ? true : false;
 		}

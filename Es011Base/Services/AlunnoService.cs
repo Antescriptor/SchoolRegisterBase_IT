@@ -1,13 +1,14 @@
-﻿using Es012Base.Models;
-using Es012Base.Stores;
-using Es012Base.Utils;
+﻿using Es013.Models;
+using Es013.Services.Interfaces;
+using Es013.Stores;
+using Es013.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Es012Base.Services
+namespace Es013.Services
 {
-	public class AlunnoService
+	public class AlunnoService : IAlunnoService
 	{
 		private readonly AlunnoStore _alunnoStore;
 		private readonly ValutazioneService _valutazioneService;
@@ -16,7 +17,7 @@ namespace Es012Base.Services
 			_alunnoStore = new();
 			_valutazioneService = valutazioneService;
 		}
-		internal void Menu(Alunno alunno)
+		public void Menu(Alunno alunno)
 		{
 			string input;
 			bool verificaNumeroNaturale;
@@ -85,7 +86,7 @@ namespace Es012Base.Services
 			}
 			while (!verificaNumeroNaturale || scelta != 0);
 		}
-		internal List<Alunno>? Cerca(string? nome = null, string? cognome = null, string? codiceFiscale = null, uint? annoNascita = null, string? classe = null)
+		public List<Alunno>? Cerca(string? nome = null, string? cognome = null, string? codiceFiscale = null, uint? annoNascita = null, string? classe = null)
 		{
 			List<Alunno> alunni = _alunnoStore.Ottieni();
 			if (alunni is not null && alunni.Count > 0)
@@ -107,7 +108,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal void RegistraAlunno()
+		public void RegistraAlunno()
 		{
 			string? nome, cognome, codiceFiscale, classe;
 			DateOnly? dataNascita;
@@ -121,7 +122,7 @@ namespace Es012Base.Services
 			_alunnoStore.Inserisci(nome, cognome, codiceFiscale, dataNascita, classe);
 			Console.WriteLine("Dati anagrafici registrati");
 		}
-		internal Alunno? OttieniAlunno(uint matricola)
+		public Alunno? OttieniAlunno(uint matricola)
 		{
 			Alunno? alunnoDaOttenere = _alunnoStore.Ottieni(matricola);
 			if (alunnoDaOttenere is not null)
@@ -133,7 +134,7 @@ namespace Es012Base.Services
 				return null;
 			}
 		}
-		internal Alunno? MenuRicercaAlunno(string propositoRicerca, bool restituzioneNecessaria = true)
+		public Alunno? MenuRicercaAlunno(string propositoRicerca, bool restituzioneNecessaria = true)
 		{
 			string input;
 			Alunno? alunnoOttenuto = null;
@@ -200,7 +201,7 @@ namespace Es012Base.Services
 
 			return alunnoOttenuto;
 		}
-		internal void MenuRegistroAnagraficoAlunni()
+		public void MenuRegistroAnagraficoAlunni()
 		{
 			string input;
 			bool verificaNumeroNaturale;
@@ -276,7 +277,7 @@ namespace Es012Base.Services
 			}
 			while (!verificaNumeroNaturale || scelta != 0);
 		}
-		internal void InserisciAlunno(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
+		public void InserisciAlunno(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
 		{
 			_alunnoStore.Inserisci(nome, cognome, codiceFiscale, dataNascita, classe);
 			Console.WriteLine("Registrazione matricola alunno completata");

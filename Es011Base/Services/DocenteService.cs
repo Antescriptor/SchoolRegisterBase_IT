@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Es012Base.Models;
-using Es012Base.Stores;
-using Es012Base.Utils;
+using Es013.Models;
+using Es013.Services.Interfaces;
+using Es013.Stores;
+using Es013.Utils;
 
-namespace Es012Base.Services
+namespace Es013.Services
 {
-	public class DocenteService
+	public class DocenteService : IDocenteService
 	{
 		private readonly DocenteStore _docenteStore;
 		private readonly AlunnoService _alunnoService;
@@ -19,7 +20,7 @@ namespace Es012Base.Services
 			_valutazioneService = valutazioneService;
 			_alunnoService = alunnoService;
 		}
-		internal void Menu(Docente docente)
+		public void Menu(Docente docente)
 		{
 			string input;
 			bool verificaNumeroNaturale;
@@ -53,7 +54,7 @@ namespace Es012Base.Services
 			while (!verificaNumeroNaturale || scelta != 0);
 
 		}
-		internal void MenuRegistroValutazioni(Docente docente)
+		public void MenuRegistroValutazioni(Docente docente)
 		{
 			string input;
 			bool verificaNumeroNaturale;
@@ -167,7 +168,7 @@ namespace Es012Base.Services
 			}
 			while (!verificaNumeroNaturale || scelta != 0);
 		}
-		internal Valutazione? MenuRicercaValutazione(Docente docente, string propositoRicerca, bool restituzioneNecessaria = true)
+		public Valutazione? MenuRicercaValutazione(Docente docente, string propositoRicerca, bool restituzioneNecessaria = true)
 		{
 			string input;
 			Valutazione? valutazioneOttenuta = null;
@@ -242,7 +243,7 @@ namespace Es012Base.Services
 				}
 			return valutazioneOttenuta;
 		}
-		internal Alunno? MenuRicercaAlunno(string propositoRicerca, bool restituzioneNecessaria = true)
+		public Alunno? MenuRicercaAlunno(string propositoRicerca, bool restituzioneNecessaria = true)
 		{
 			string input;
 			Alunno? alunnoOttenuto = null;
@@ -309,16 +310,16 @@ namespace Es012Base.Services
 
 			return alunnoOttenuto;
 		}
-		internal void MenuRegistroAnagraficoDocenti() //Da implementare
+		public void MenuRegistroAnagraficoDocenti() //Da implementare
 		{
 			Console.WriteLine("Menu docente -> Registro anagrafico docenti\n1. ");
 		}
-		internal void InserisciDocente(string? nome, string? cognome, string? codiceFiscale, DateOnly? dataNascita, string? materia)
+		public void InserisciDocente(string? nome, string? cognome, string? codiceFiscale, DateOnly? dataNascita, string? materia)
 		{
 			_docenteStore.Inserisci(nome, cognome, codiceFiscale, dataNascita, materia);
 			Console.WriteLine("Registrazione completata");
 		}
-		internal Docente? OttieniDocente(uint matricola)
+		public Docente? OttieniDocente(uint matricola)
 		{
 			return _docenteStore.Ottieni(matricola);
 		}

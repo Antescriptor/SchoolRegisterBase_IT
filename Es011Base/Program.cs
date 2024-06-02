@@ -1,14 +1,13 @@
-﻿using Es012Base.Services;
+﻿using Es013.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
-namespace Es012Base
+namespace Es013
 {
 	internal class Program
 	{
 		static void Main(string[] args)
 		{
-			//1. Creazione di un contenitore per l'iniezione delle dipendenze
+			//1. Istanziazione di un contenitore per l'iniezione delle dipendenze
 			ServiceCollection serviceCollection = new();
 
 			//2. Aggiunta dei servizi al contenitore di iniezione delle dipendenze con durata di vita
@@ -19,10 +18,10 @@ namespace Es012Base
 			serviceCollection.AddScoped<RegistroService>();
 
 			//3. Costruzione del fornitore dei servizi a partire dal contenitore di iniezione delle dipendenze
-			ServiceProvider ServiceProvider = serviceCollection.BuildServiceProvider();
+			ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
 			//4. Ottenimento del registroService dal fornitore dei servizi
-			RegistroService? registroService = ServiceProvider.GetService<RegistroService>();
+			RegistroService? registroService = serviceProvider.GetService<RegistroService>();
 
 			//5. Chiamata al metodo Menu del registroService se questo esiste
 			registroService?.Menu();

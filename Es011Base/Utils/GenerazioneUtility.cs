@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Es012Base.Utils
+namespace Es013.Utils
 {
 	public class GenerazioneUtility
 	{
-		internal static string Password(int lunghezza)
+		public static string Password(int lunghezza)
 		{
 			Random gen = new();
 			string alfabeto = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@&*$%#";

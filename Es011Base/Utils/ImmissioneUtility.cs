@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Es012Base.Utils
+namespace Es013.Utils
 {
 	public static class ImmissioneUtility
 	{
-		internal static string Password(uint lunghezza)
+		public static string Password(uint lunghezza)
 		{
 			string input;
 			{
@@ -17,7 +17,7 @@ namespace Es012Base.Utils
 				return input;
 			}
 		}
-		internal static uint? NumeroNaturale(string nomeVariabile = "")
+		public static uint? NumeroNaturale(string nomeVariabile = "")
 		{
 			string? input;
 			bool matricolaOIdNullo;
@@ -49,7 +49,7 @@ namespace Es012Base.Utils
 
 			return numeroNaturale;
 		}
-		internal static string? Stringa(string nomeVariabile = "")
+		public static string? Stringa(string nomeVariabile = "")
 		{
 			string? input;
 
@@ -67,7 +67,7 @@ namespace Es012Base.Utils
 
 			return input;
 		}
-		internal static DateOnly? Data()
+		public static DateOnly? Data()
 		{
 			string? input;
 			bool verificaData;
@@ -91,7 +91,7 @@ namespace Es012Base.Utils
 
 			return data;
 		}
-		internal static DateTime? DataEOra()
+		public static DateTime? DataEOra()
 		{
 			string? input;
 			bool verificaDataEOra;
@@ -115,7 +115,7 @@ namespace Es012Base.Utils
 
 			return dataEOra;
 		}
-		internal static decimal? NumeroRazionale(string nomeVariabile = "")
+		public static decimal? NumeroRazionale(string nomeVariabile = "")
 		{
 			string? input;
 			bool verificaNumeroRazionale;

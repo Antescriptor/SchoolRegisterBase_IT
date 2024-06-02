@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Es013.Models.Interfaces;
+using System;
 
-namespace Es012Base.Models
+namespace Es013.Models
 {
-	public class Valutazione
+	public class Valutazione : IValutazione
 	{
 		public Valutazione(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
 		{
@@ -23,13 +24,13 @@ namespace Es012Base.Models
 				DataEOra = (DateTime)(dataEOra);
 			}
 		}
-		internal static uint ContatoreId { get; set; } = 0;
-		internal uint Id { get; }
-		internal Docente Docente { get; }
-		internal Alunno Alunno { get; }
-		internal DateTime DataEOra { get; set; }
-		internal string? Materia { get; set; }
-		internal string? Classe { get; set; }
-		internal decimal? Voto { get; set; }
+		public static uint ContatoreId { get; set; } = 0;
+		public uint Id { get; }
+		public Docente Docente { get; }
+		public Alunno Alunno { get; }
+		public DateTime DataEOra { get; set; }
+		public string? Materia { get; set; }
+		public string? Classe { get; set; }
+		public decimal? Voto { get; set; }
 	}
 }

@@ -1,8 +1,8 @@
-﻿using Es012Base.Models;
+﻿using Es013.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Es012Base.Utils
+namespace Es013.Utils
 {
 	public static class StampaUtility
 	{

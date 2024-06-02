@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Es012Base.Models
+namespace Es013.Models
 {
 	public class ProiezioneValutazione
 	{
@@ -10,8 +10,8 @@ namespace Es012Base.Models
 			Materia = materia;
 			MediaVoto = mediaVoto;
 		}
-		internal DateTime DataEOra {  get; set; }
-		internal string? Materia { get; set; }
-		internal decimal? MediaVoto { get; set; }
+		public DateTime DataEOra {  get; set; }
+		public string? Materia { get; set; }
+		public decimal? MediaVoto { get; set; }
 	}
 }

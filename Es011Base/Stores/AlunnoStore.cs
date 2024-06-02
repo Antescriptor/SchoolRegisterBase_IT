@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Es012Base.Models;
+using Es013.Models;
+using Es013.Stores.Interfaces;
 
-namespace Es012Base.Stores
+namespace Es013.Stores
 {
-	internal class AlunnoStore
+	public class AlunnoStore : IAlunnoStore
 	{
 		private readonly List<Alunno> alunni = new();
-		internal bool Inserisci(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
+		public bool Inserisci(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
 		{
 			Alunno nuovoAlunno = new(nome, cognome, codiceFiscale, dataNascita, classe);
 			alunni?.Add(nuovoAlunno);
 			return true;
 		}
-		internal List<Alunno> Ottieni()
+		public List<Alunno> Ottieni()
 		{
 			return alunni;
 		}
-		internal Alunno? Ottieni(uint matricola)
+		public Alunno? Ottieni(uint matricola)
 		{
 			return alunni?.FirstOrDefault(a => a.Matricola == matricola);
 		}
-		internal bool Aggiorna(uint matricolaAlunnoDaAggiornare, string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
+		public bool Aggiorna(uint matricolaAlunnoDaAggiornare, string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
 		{
 			Alunno? alunnoDaAggiornare = alunni.FirstOrDefault(a => a.Matricola == matricolaAlunnoDaAggiornare);
 			if (alunnoDaAggiornare is not null)
@@ -35,7 +36,7 @@ namespace Es012Base.Stores
 			}
 			return true;
 		}
-		internal bool Cancella(uint? matricolaAlunnoDaCancellare)
+		public bool Cancella(uint? matricolaAlunnoDaCancellare)
 		{
 			Alunno? alunnoDaCancellare = alunni.FirstOrDefault(a => a.Matricola == matricolaAlunnoDaCancellare);
 			if (alunnoDaCancellare is not null)
