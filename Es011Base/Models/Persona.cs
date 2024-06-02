@@ -1,7 +1,7 @@
-﻿using Es011Base.Utils;
+﻿using Es012Base.Utils;
 using System;
 
-namespace Es011Base.Models
+namespace Es012Base.Models
 {
 	internal abstract class Persona
 	{

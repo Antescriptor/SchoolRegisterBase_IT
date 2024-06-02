@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Es011Base.Utils
+namespace Es012Base.Utils
 {
 	internal class GenerazioneUtility
 	{

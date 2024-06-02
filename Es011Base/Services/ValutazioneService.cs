@@ -1,40 +1,37 @@
-﻿using Es011Base.Models;
+﻿using Es012Base.Models;
+using Es012Base.Stores;
+using Es012Base.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Es011Base.Services
+namespace Es012Base.Services
 {
 	internal class ValutazioneService
 	{
-		private List <Valutazione> valutazioni = new();
+		private readonly ValutazioneStore _valutazioneStore = new();
 
-		internal void Inserisci(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
+		internal static decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
 		{
-			Valutazione valutazioneDaAggiungere = new(docente, alunno, dataEOra, materia, classe, voto);
-			valutazioni.Add(valutazioneDaAggiungere);
-		}
-		internal Valutazione? Ottieni(uint idValutazione)
-		{
-			return valutazioni.FirstOrDefault(v => v.Id == idValutazione);
-		}
-		internal static void Aggiorna(Valutazione? valutazioneDaAggiornare, DateTime? data = null, decimal? voto = null)
-		{
-			if (valutazioneDaAggiornare is not null)
+			if (valutazioni is not null && valutazioni.Count > 0)
 			{
-				if (voto is not null) valutazioneDaAggiornare.Voto = voto;
-				if (data is not null) valutazioneDaAggiornare.DataEOra = (DateTime)(data);
+				return valutazioni
+					.Where
+					(
+						v => v.Voto.HasValue &&
+						((alunno is not null) ? v.Alunno == alunno : true) &&
+						((anno is not null) ? v.DataEOra.Year == anno : true)
+					)
+					.Average(v => v.Voto.GetValueOrDefault());
 			}
-		}
-		internal void Cancella(Valutazione? valutazioneDaCancellare)
-		{
-			if (valutazioneDaCancellare is not null)
+			else
 			{
-				valutazioni.Remove(valutazioneDaCancellare);
+				return null;
 			}
 		}
 		internal List<Valutazione>? Cerca(Docente? docente = null, Alunno? alunno = null, DateOnly? data = null, uint? anno = null, string? materia = null, string? classe = null, decimal? voto = null)
 		{
+			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
 			if (valutazioni is not null && valutazioni.Count > 0)
 			{
 				return valutazioni
@@ -60,33 +57,41 @@ namespace Es011Base.Services
 		}
 		internal List<Valutazione>? FiltraPerDocenteAnnoMateriaClasse(Docente docente, uint? anno = null, string? materia = null, string? classe = null)
 		{
-			return valutazioni
-					.Where(v =>
-						(v.Docente == docente) &&
-						((anno is not null) ? v.DataEOra.Year == anno : true) &&
-						((materia is not null && v.Materia is not null) ? v.Materia.ToLower().Trim() == materia.ToLower().Trim() : true) &&
-						((classe is not null && v.Classe is not null) ? v.Classe.ToLower().Trim() == classe.ToLower().Trim() : true))
-					.OrderBy(v => v.DataEOra)
-					.ThenBy(v => v.Classe).ToList();
-		}
-		internal List<ProiezioneValutazione>? CalcolaMediaPerMateria(Alunno? alunno = null, uint? anno = null)
-		{
-			if (valutazioni is not null && valutazioni.Count > 0)
+			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
+			if (valutazioni.Count > 0)
 			{
-				/* Tipo di restituzione decimale
 				return valutazioni
-					.Where
-					(
-						v =>
-						(anno is not null ? v.DataEOra.Year == anno : true) &&
-						v.Voto.HasValue
-					)
-					.OrderByDescending(v => v.DataEOra)
-					.GroupBy(v => v.Materia)
-					.Select(gruppo => gruppo.Average(v => v.Voto.GetValueOrDefault()))
-					?.ToList();
-				*/
-
+						.Where(v =>
+							(v.Docente == docente) &&
+							((anno is not null) ? v.DataEOra.Year == anno : true) &&
+							((materia is not null && v.Materia is not null) ? v.Materia.ToLower().Trim() == materia.ToLower().Trim() : true) &&
+							((classe is not null && v.Classe is not null) ? v.Classe.ToLower().Trim() == classe.ToLower().Trim() : true))
+						.OrderBy(v => v.DataEOra)
+						.ThenBy(v => v.Classe).ToList();
+			}
+			else
+			{
+				return null;
+			}
+		}
+		internal List<ProiezioneValutazione>? FiltraECalcolaMediaPerMateria(Alunno? alunno = null, uint? anno = null)
+		{
+			List<Valutazione> valutazioni = _valutazioneStore.Ottieni();
+			/* Tipo di restituzione decimale
+			return valutazioni
+				.Where
+				(
+					v =>
+					(anno is not null ? v.DataEOra.Year == anno : true) &&
+					v.Voto.HasValue
+				)
+				.OrderByDescending(v => v.DataEOra)
+				.GroupBy(v => v.Materia)
+				.Select(gruppo => gruppo.Average(v => v.Voto.GetValueOrDefault()))
+				?.ToList();
+			*/
+			if (valutazioni.Count > 0)
+			{
 				return valutazioni
 					.Where(v =>
 						(alunno is not null ? alunno == v.Alunno : true) &&
@@ -106,23 +111,32 @@ namespace Es011Base.Services
 				return null;
 			}
 		}
-		internal decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
+		internal void InserisciValutazione(Docente docente, Alunno alunno)
 		{
-			if (valutazioni is not null && valutazioni.Count > 0)
+			DateTime? dataEOra = ImmissioneUtility.DataEOra();
+
+			string? materia = docente.Materia;
+			if (docente.Materia is null)
 			{
-				return valutazioni
-					.Where
-					(
-						v => v.Voto.HasValue &&
-						((alunno is not null) ? v.Alunno == alunno : true) &&
-						((anno is not null) ? v.DataEOra.Year == anno : true)
-					)
-					.Average(v => v.Voto.GetValueOrDefault());
+				materia = ImmissioneUtility.Stringa("materia");
 			}
-			else
+
+			string? classe = alunno.Classe;
+			if (alunno.Classe is null)
 			{
-				return null;
+				classe = ImmissioneUtility.Stringa("classe");
 			}
+
+			decimal? voto = ImmissioneUtility.NumeroRazionale("voto");
+			_valutazioneStore.Inserisci(docente, alunno, dataEOra, materia, classe, voto);
+		}
+		internal Valutazione? OttieniValutazione(uint id)
+		{
+			return _valutazioneStore.Ottieni(id);
+		}
+		internal void CancellaValutazione(uint id)
+		{
+			_valutazioneStore.Cancella(id);
 		}
 	}
 }

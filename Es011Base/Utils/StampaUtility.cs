@@ -1,10 +1,10 @@
-﻿using Es011Base.Models;
+﻿using Es012Base.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Es011Base.Utils
+namespace Es012Base.Utils
 {
-	internal class StampaUtility
+	internal static class StampaUtility
 	{
 		internal static void Alunno(Alunno? alunno)
 		{
@@ -79,13 +79,20 @@ namespace Es011Base.Utils
 				Console.WriteLine("\nNessuna valutazione.");
 			}
 		}
-		internal static void ListaProiezioneValutazioni(List<ProiezioneValutazione>? lista)
+		internal static void ListaProiezioneValutazioni(List<ProiezioneValutazione>? lista, uint? anno = null)
 		{
-			if (lista is not null && lista.Count > 0)
+			if (lista is not null && lista.Count > 0 && anno is not null)
 			{
 				foreach(ProiezioneValutazione p in lista)
 				{
-					Console.WriteLine($"\nData e ora:\t\t\t{p.DataEOra}\nMateria:\t\t\t{p.Materia}\nMedia delle valutazioni:\t{p.MediaVoto}");
+					Console.WriteLine($"\nAnno:\t\t\t{p.DataEOra.Year}\nMateria:\t\t\t{p.Materia}\nMedia delle valutazioni:\t{p.MediaVoto}");
+				}
+			}
+			else if (lista is not null && lista.Count > 0)
+			{
+				foreach (ProiezioneValutazione p in lista)
+				{
+					Console.WriteLine($"\nMateria:\t\t\t{p.Materia}\nMedia delle valutazioni:\t{p.MediaVoto}");
 				}
 			}
 			else

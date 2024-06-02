@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Es011Base.Models
+namespace Es012Base.Models
 {
 	internal class Docente : Persona
 	{

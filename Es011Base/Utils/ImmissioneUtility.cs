@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Es011Base.Utils
+namespace Es012Base.Utils
 {
 	internal static class ImmissioneUtility
 	{

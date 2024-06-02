@@ -1,8 +1,8 @@
-﻿using Es011Base.Utils;
-using Es011Base.Models;
+﻿using Es012Base.Utils;
+using Es012Base.Models;
 using System;
 
-namespace Es011Base.Services
+namespace Es012Base.Services
 {
 	internal class RegistroService
 	{
@@ -11,9 +11,10 @@ namespace Es011Base.Services
 		private DocenteService _docenteService;
 		internal RegistroService()
 		{
-			_valutazioneService = new ValutazioneService();
-			_alunnoService = new AlunnoService(_valutazioneService);
+			_valutazioneService = new();
+			_alunnoService = new(_valutazioneService);
 			_docenteService = new(_alunnoService, _valutazioneService);
+		
 		}
 		internal void Menu()
 		{
@@ -38,7 +39,7 @@ namespace Es011Base.Services
 
 							matricola = (uint)(_matricola);
 							string password = ImmissioneUtility.Password(8);
-							Docente? docente = _docenteService.Ottieni(matricola);
+							Docente? docente = _docenteService.OttieniDocente(matricola);
 							if (docente is not null && docente.ControllaPassword(password))
 							{
 								_docenteService.Menu(docente);
@@ -59,7 +60,7 @@ namespace Es011Base.Services
 
 							matricola = (uint)(_matricola);
 							string password = ImmissioneUtility.Password(8);
-							Alunno? alunno = _alunnoService.Ottieni(matricola);
+							Alunno? alunno = _alunnoService.OttieniAlunno(matricola);
 							if (alunno is not null && alunno.ControllaPassword(password))
 							{
 								_alunnoService.Menu(alunno);
@@ -84,9 +85,7 @@ namespace Es011Base.Services
 							dataNascita = ImmissioneUtility.Data();
 							materia = ImmissioneUtility.Stringa("materia");
 
-							_docenteService.Inserisci(nome, cognome, codiceFiscale, dataNascita, materia);
-
-							Console.WriteLine("Registrazione completata");
+							_docenteService.InserisciDocente(nome, cognome, codiceFiscale, dataNascita, materia);
 
 							break;
 						}
@@ -106,9 +105,7 @@ namespace Es011Base.Services
 							classe = ImmissioneUtility.Stringa("classe");
 							*/
 
-							_alunnoService.Inserisci();
-
-							Console.WriteLine("Registrazione matricola alunno completata");
+							_alunnoService.InserisciAlunno();
 
 							break;
 						}

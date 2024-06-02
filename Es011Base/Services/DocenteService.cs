@@ -1,47 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Es011Base.Models;
-using Es011Base.Utils;
+using Es012Base.Models;
+using Es012Base.Stores;
+using Es012Base.Utils;
 
-namespace Es011Base.Services
+namespace Es012Base.Services
 {
 	internal class DocenteService
 	{
-		private List<Docente> docenti = new();
-		private AlunnoService _alunnoService;
-		private ValutazioneService _valutazioneService;
+		private readonly DocenteStore _docenteStore;
+		private readonly AlunnoService _alunnoService;
+		private readonly ValutazioneService _valutazioneService;
+
 		internal DocenteService(AlunnoService alunnoService, ValutazioneService valutazioneService)
 		{
-			_alunnoService = alunnoService;
+			_docenteStore = new();
+
 			_valutazioneService = valutazioneService;
-		}
-		internal void Inserisci(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? materia = null)
-		{
-			Docente nuovoDocente = new(nome, cognome, codiceFiscale, dataNascita, materia);
-			docenti?.Add(nuovoDocente);
-		}
-		internal Docente? Ottieni(uint matricola)
-		{
-			return docenti?.FirstOrDefault(d => d.Matricola == matricola);
-		}
-		internal void Aggiorna(Docente docenteDaAggiornare, string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? materia = null) 
-		{
-			if (docenteDaAggiornare is not null)
-			{
-				if (nome is not null) docenteDaAggiornare.Nome = nome;
-				if (cognome is not null) docenteDaAggiornare.Cognome = cognome;
-				if (codiceFiscale is not null) docenteDaAggiornare.CodiceFiscale = codiceFiscale;
-				if (dataNascita is not null) docenteDaAggiornare.DataNascita = dataNascita;
-				if (materia is not null) docenteDaAggiornare.Materia = materia;
-			}
-		}
-		internal void Cancella(Docente? docenteDaCancellare)
-		{
-			if (docenteDaCancellare is not null)
-			{
-				docenti.Remove(docenteDaCancellare);
-			}
+			_alunnoService = alunnoService;
 		}
 		internal void Menu(Docente docente)
 		{
@@ -59,7 +35,7 @@ namespace Es011Base.Services
 				{
 					case 1:
 						Console.WriteLine("\nRegistro anagrafico degli alunni");
-						MenuRegistroAnagrafico();
+						_alunnoService.MenuRegistroAnagraficoAlunni();
 						break;
 					case 2:
 						Console.WriteLine("\nRegistro delle valutazioni");
@@ -67,7 +43,7 @@ namespace Es011Base.Services
 						break;
 					case 3:
 						Console.WriteLine("\nVisualizzazione del registro anagrafico dei docenti");
-						StampaUtility.ListaDocenti(docenti);
+						StampaUtility.ListaDocenti(_docenteStore.Ottieni());
 						break;
 					default:
 						break;
@@ -76,96 +52,6 @@ namespace Es011Base.Services
 			}
 			while (!verificaNumeroNaturale || scelta != 0);
 
-		}
-		internal void MenuRegistroAnagrafico()
-		{
-			string input;
-			bool verificaNumeroNaturale;
-			uint scelta;
-
-			do
-			{
-				Console.WriteLine("\nMenu docente -> Registro anagrafico alunni\n\n1. Inserimento\n2. Visualizzazione elenco degli alunni filtrato per anno e/o classe d'appartenenza\n3. Ricerca\n4. Aggiornamento\n5. Cancellazione\n\n0. Indietro");
-				input = Console.ReadLine() ?? "";
-				verificaNumeroNaturale = uint.TryParse(input, out scelta);
-
-				switch (scelta)
-				{
-					//Inserimento alunno
-					case 1:
-						{
-							Console.WriteLine("\nInserimento dati anagrafici di alunno");
-
-							string? nome, cognome, codiceFiscale, classe;
-							DateOnly? dataNascita;
-
-							nome = ImmissioneUtility.Stringa("nome");
-							cognome = ImmissioneUtility.Stringa("cognome");
-							codiceFiscale = ImmissioneUtility.Stringa("codice fiscale");
-							dataNascita = ImmissioneUtility.Data();
-							classe = ImmissioneUtility.Stringa("classe");
-
-							_alunnoService.Inserisci(nome, cognome, codiceFiscale, dataNascita, classe);
-
-							Console.WriteLine("Dati anagrafici registrati");
-
-							break;
-						}
-					//Visualizzazione elenco degli alunni
-					case 2:
-						{
-							Console.WriteLine("Visualizzazione dei dati anagrafici degli alunni\nfiltrati per anno e/o classe d'appartenenza");
-
-							uint? anno = ImmissioneUtility.NumeroNaturale("anno");
-							string? classe = ImmissioneUtility.Stringa("classe");
-
-							List<Alunno>? alunniFiltrati = _alunnoService.Cerca(null, null, null, anno, classe);
-							StampaUtility.ListaAlunni(alunniFiltrati);
-
-							break;
-						}
-					//Ricerca alunno
-					case 3:
-						{
-							Console.WriteLine("\nRicerca dei dati anagrafici di alunno");
-							MenuRicercaAlunno("ricerca dei dati anagrafici", false);
-							break;
-						}
-					//Aggiornamento alunno
-					case 4:
-						{
-							Console.WriteLine("\nAggiornamento dati anagrafici di alunno");
-
-							Alunno? alunnoDaAggiornare = MenuRicercaAlunno("modifica dei dati anagrafici");
-							if (alunnoDaAggiornare is null) break;
-
-							string? nome = ImmissioneUtility.Stringa("nome");
-							string? cognome = ImmissioneUtility.Stringa("cognome");
-							string? codiceFiscale = ImmissioneUtility.Stringa("codice fiscale");
-							DateOnly? dataNascita = ImmissioneUtility.Data();
-							string? classe = ImmissioneUtility.Stringa("classe");
-
-							_alunnoService.Aggiorna(alunnoDaAggiornare, nome, cognome, codiceFiscale, dataNascita, classe);
-							Console.WriteLine("Dati anagrafici dell'alunno selezionato aggiornati");
-							break;
-						}
-					//Cancellazione alunno
-					case 5:
-						{
-							Console.WriteLine("\nCancellazione dati anagrafici di alunno");
-
-							Alunno? alunnoDaCancellare = MenuRicercaAlunno("cancellazione dei dati anagrafici");
-							if (alunnoDaCancellare is null) break;
-
-							_alunnoService.Cancella(alunnoDaCancellare);
-							Console.WriteLine("Dati anagrafici dell'alunno selezionato cancellati");
-							break;
-						}
-					default:
-						break;
-				}
-			}
-			while (!verificaNumeroNaturale || scelta != 0);
 		}
 		internal void MenuRegistroValutazioni(Docente docente)
 		{
@@ -190,31 +76,12 @@ namespace Es011Base.Services
 							uint matricola;
 
 							_matricola = ImmissioneUtility.NumeroNaturale("matricola");
-							if (_matricola is null) break;
+							if (_matricola is null) return;
 							matricola = (uint)_matricola;
 
-							Alunno? alunnoOttenuto = _alunnoService.Ottieni(matricola);
-							if (alunnoOttenuto is null) break;
-
-							DateTime? dataEOra = ImmissioneUtility.DataEOra();
-
-							string? materia = docente.Materia;
-							if (docente.Materia is null)
-							{
-								materia = ImmissioneUtility.Stringa("materia");
-							}
-
-							string? classe = alunnoOttenuto.Classe;
-							if (alunnoOttenuto.Classe is null)
-							{
-								classe = ImmissioneUtility.Stringa("classe");
-							}
-
-							decimal? voto = ImmissioneUtility.NumeroRazionale("voto");
-
-							_valutazioneService.Inserisci(docente, alunnoOttenuto, dataEOra, materia, classe, voto);
-
-							Console.WriteLine("Valutazione inserita");
+							Alunno? alunnoOttenuto = _alunnoService.OttieniAlunno(matricola);
+							if (alunnoOttenuto is null) return;
+							_valutazioneService.InserisciValutazione(docente, alunnoOttenuto);
 
 							break;
 						}
@@ -237,7 +104,7 @@ namespace Es011Base.Services
 							DateTime? dataEOra = ImmissioneUtility.DataEOra();
 							Decimal? voto = ImmissioneUtility.NumeroRazionale("voto");
 
-							ValutazioneService.Aggiorna(valutazioneDaAggiornare, dataEOra, voto);
+							ValutazioneStore.Aggiorna(valutazioneDaAggiornare, dataEOra, voto);
 							Console.WriteLine("Valutazione aggiornata");
 
 							break;
@@ -249,7 +116,7 @@ namespace Es011Base.Services
 							Valutazione? valutazioneDaCancellare = MenuRicercaValutazione(docente, "cancellazione");
 							if (valutazioneDaCancellare is null) break;
 
-							_valutazioneService.Cancella(valutazioneDaCancellare);
+							_valutazioneService.CancellaValutazione(valutazioneDaCancellare.Id);
 							Console.WriteLine("Valutazione cancellata");
 
 							break;
@@ -290,8 +157,8 @@ namespace Es011Base.Services
 
 							if (valutazioniTrovate is null || valutazioniTrovate.Count < 1) break;
 
-							decimal? mediaAlunno = _valutazioneService.CalcolaMedia(valutazioniTrovate);
-							Console.WriteLine($"La media delle valutazioni di {alunnoOttenuto.Nome} {alunnoOttenuto.Cognome} (n. di matricola: {alunnoOttenuto.Matricola})\nsecondo i criteri impostati è: {mediaAlunno}");
+							decimal? mediaAlunno = ValutazioneService.CalcolaMedia(valutazioniTrovate);
+							Console.WriteLine($"La media delle valutazioni di {alunnoOttenuto.Nome} {alunnoOttenuto.Cognome} (matricola n .{alunnoOttenuto.Matricola})\nsecondo i criteri impostati è di {mediaAlunno}");
 							break;
 						}
 					default:
@@ -303,7 +170,6 @@ namespace Es011Base.Services
 		internal Valutazione? MenuRicercaValutazione(Docente docente, string propositoRicerca, bool restituzioneNecessaria = true)
 		{
 			string input;
-			uint scelta;
 			Valutazione? valutazioneOttenuta = null;
 			Alunno? alunnoOttenuto;
 
@@ -320,7 +186,7 @@ namespace Es011Base.Services
 
 				Console.WriteLine($"\nCriteri di {propositoRicerca} di valutazione\n\n1. Per Id\t2. Altri criteri");
 				input = Console.ReadLine() ?? "";
-				uint.TryParse(input, out scelta);
+				uint.TryParse(input, out uint scelta);
 
 				switch (scelta)
 				{
@@ -331,7 +197,7 @@ namespace Es011Base.Services
 						if (_idValutazione is null) break;
 						idValutazione = (uint)_idValutazione;
 
-						valutazioneOttenuta = _valutazioneService.Ottieni(idValutazione);
+						valutazioneOttenuta = _valutazioneService.OttieniValutazione(idValutazione);
 						StampaUtility.Valutazione(valutazioneOttenuta);
 
 						break;
@@ -343,7 +209,7 @@ namespace Es011Base.Services
 						if (_matricolaAlunno is null) break;
 						matricolaAlunno = (uint)_matricolaAlunno;
 
-						alunnoOttenuto = _alunnoService.Ottieni(matricolaAlunno);
+						alunnoOttenuto = _alunnoService.OttieniAlunno(matricolaAlunno);
 						if (alunnoOttenuto is null) break;
 
 						Console.WriteLine($"\nInserire dati valutazione per la {propositoRicerca}");
@@ -365,7 +231,7 @@ namespace Es011Base.Services
 							if (_idValutazione is null) break;
 							idValutazione = (uint)_idValutazione;
 
-							valutazioneOttenuta = _valutazioneService.Ottieni(idValutazione);
+							valutazioneOttenuta = _valutazioneService.OttieniValutazione(idValutazione);
 							StampaUtility.Valutazione(valutazioneOttenuta);
 						}
 
@@ -379,12 +245,11 @@ namespace Es011Base.Services
 		internal Alunno? MenuRicercaAlunno(string propositoRicerca, bool restituzioneNecessaria = true)
 		{
 			string input;
-			uint scelta;
 			Alunno? alunnoOttenuto = null;
 
 			Console.WriteLine($"\nCriteri di {propositoRicerca} dell'alunno\n\n1. Per matricola\t2. Altri criteri");
 			input = Console.ReadLine() ?? "";
-			uint.TryParse(input, out scelta);
+			uint.TryParse(input, out uint scelta);
 
 			switch (scelta)
 			{
@@ -399,7 +264,7 @@ namespace Es011Base.Services
 						if (_matricola is null) break;
 						matricola = (uint)_matricola;
 
-						alunnoOttenuto = _alunnoService.Ottieni(matricola);
+						alunnoOttenuto = _alunnoService.OttieniAlunno(matricola);
 						StampaUtility.Alunno(alunnoOttenuto);
 
 						break;
@@ -433,7 +298,7 @@ namespace Es011Base.Services
 							if (_matricola is null) break;
 							matricola = (uint)_matricola;
 
-							alunnoOttenuto = _alunnoService.Ottieni(matricola);
+							alunnoOttenuto = _alunnoService.OttieniAlunno(matricola);
 							StampaUtility.Alunno(alunnoOttenuto);
 						}
 						break;
@@ -443,6 +308,19 @@ namespace Es011Base.Services
 			}
 
 			return alunnoOttenuto;
+		}
+		internal void MenuRegistroAnagraficoDocenti() //Da implementare
+		{
+			Console.WriteLine("Menu docente -> Registro anagrafico docenti\n1. ");
+		}
+		internal void InserisciDocente(string? nome, string? cognome, string? codiceFiscale, DateOnly? dataNascita, string? materia)
+		{
+			_docenteStore.Inserisci(nome, cognome, codiceFiscale, dataNascita, materia);
+			Console.WriteLine("Registrazione completata");
+		}
+		internal Docente? OttieniDocente(uint matricola)
+		{
+			return _docenteStore.Ottieni(matricola);
 		}
 	}
 }
