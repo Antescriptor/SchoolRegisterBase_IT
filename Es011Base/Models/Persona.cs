@@ -3,9 +3,9 @@ using System;
 
 namespace Es012Base.Models
 {
-	internal abstract class Persona
+	public abstract class Persona
 	{
-		internal Persona(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null)
+		public Persona(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null)
 		{
 			ContatoreMatricola++;
 			Matricola = ContatoreMatricola;

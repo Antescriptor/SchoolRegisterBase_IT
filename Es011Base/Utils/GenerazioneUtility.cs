@@ -2,7 +2,7 @@
 
 namespace Es012Base.Utils
 {
-	internal class GenerazioneUtility
+	public class GenerazioneUtility
 	{
 		internal static string Password(int lunghezza)
 		{

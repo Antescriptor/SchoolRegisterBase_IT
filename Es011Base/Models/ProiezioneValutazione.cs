@@ -2,9 +2,9 @@
 
 namespace Es012Base.Models
 {
-	internal class ProiezioneValutazione
+	public class ProiezioneValutazione
 	{
-		internal ProiezioneValutazione(DateTime dataEOra, string? materia = null, decimal? mediaVoto = null) 
+		public ProiezioneValutazione(DateTime dataEOra, string? materia = null, decimal? mediaVoto = null) 
 		{ 
 			DataEOra = dataEOra;
 			Materia = materia;

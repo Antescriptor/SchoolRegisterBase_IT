@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Es012Base.Utils
 {
-	internal static class StampaUtility
+	public static class StampaUtility
 	{
 		internal static void Alunno(Alunno? alunno)
 		{

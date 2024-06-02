@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace Es012Base.Services
 {
-	internal class AlunnoService
+	public class AlunnoService
 	{
 		private readonly AlunnoStore _alunnoStore;
 		private readonly ValutazioneService _valutazioneService;
-		internal AlunnoService(ValutazioneService valutazioneService)
+		public AlunnoService(ValutazioneService valutazioneService)
 		{
 			_alunnoStore = new();
 			_valutazioneService = valutazioneService;

@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Es012Base.Utils
 {
-	internal static class ImmissioneUtility
+	public static class ImmissioneUtility
 	{
 		internal static string Password(uint lunghezza)
 		{

@@ -2,7 +2,7 @@
 
 namespace Es012Base.Models
 {
-	internal class Alunno : Persona
+	public class Alunno : Persona
 	{
 		internal Alunno(string? nome = null, string? cognome = null, string? codiceFiscale = null, DateOnly? dataNascita = null, string? classe = null)
 			: base(nome, cognome, codiceFiscale, dataNascita)

@@ -6,13 +6,13 @@ using Es012Base.Utils;
 
 namespace Es012Base.Services
 {
-	internal class DocenteService
+	public class DocenteService
 	{
 		private readonly DocenteStore _docenteStore;
 		private readonly AlunnoService _alunnoService;
 		private readonly ValutazioneService _valutazioneService;
 
-		internal DocenteService(AlunnoService alunnoService, ValutazioneService valutazioneService)
+		public DocenteService(AlunnoService alunnoService, ValutazioneService valutazioneService)
 		{
 			_docenteStore = new();
 
@@ -158,7 +158,7 @@ namespace Es012Base.Services
 							if (valutazioniTrovate is null || valutazioniTrovate.Count < 1) break;
 
 							decimal? mediaAlunno = ValutazioneService.CalcolaMedia(valutazioniTrovate);
-							Console.WriteLine($"La media delle valutazioni di {alunnoOttenuto.Nome} {alunnoOttenuto.Cognome} (matricola n .{alunnoOttenuto.Matricola})\nsecondo i criteri impostati è di {mediaAlunno}");
+							Console.WriteLine($"La media delle valutazioni di {alunnoOttenuto.Nome} {alunnoOttenuto.Cognome} (matricola n. {alunnoOttenuto.Matricola})\nsecondo i criteri impostati è di {mediaAlunno}");
 							break;
 						}
 					default:

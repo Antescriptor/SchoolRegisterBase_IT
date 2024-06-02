@@ -4,17 +4,14 @@ using System;
 
 namespace Es012Base.Services
 {
-	internal class RegistroService
+	public class RegistroService
 	{
-		private ValutazioneService _valutazioneService;
-		private AlunnoService _alunnoService;
 		private DocenteService _docenteService;
-		internal RegistroService()
+		private AlunnoService _alunnoService;
+		public RegistroService(DocenteService docenteService, AlunnoService alunnoService)
 		{
-			_valutazioneService = new();
-			_alunnoService = new(_valutazioneService);
-			_docenteService = new(_alunnoService, _valutazioneService);
-		
+			_docenteService = docenteService;
+			_alunnoService = alunnoService;
 		}
 		internal void Menu()
 		{

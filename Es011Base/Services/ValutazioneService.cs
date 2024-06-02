@@ -7,10 +7,13 @@ using System.Linq;
 
 namespace Es012Base.Services
 {
-	internal class ValutazioneService
+	public class ValutazioneService
 	{
-		private readonly ValutazioneStore _valutazioneStore = new();
-
+		private readonly ValutazioneStore _valutazioneStore;
+		public ValutazioneService()
+		{
+			_valutazioneStore = new();
+		}
 		internal static decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
 		{
 			if (valutazioni is not null && valutazioni.Count > 0)

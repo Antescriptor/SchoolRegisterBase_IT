@@ -2,9 +2,9 @@
 
 namespace Es012Base.Models
 {
-	internal class Valutazione
+	public class Valutazione
 	{
-		internal Valutazione(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
+		public Valutazione(Docente docente, Alunno alunno, DateTime? dataEOra = null, string? materia = null, string? classe = null, decimal? voto = null)
 		{
 			ContatoreId++;
 			Id = ContatoreId;
