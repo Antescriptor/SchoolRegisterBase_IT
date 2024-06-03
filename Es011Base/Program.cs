@@ -11,11 +11,11 @@ namespace Es013
 			//1. Istanziazione di un contenitore per l'iniezione delle dipendenze
 			ServiceCollection serviceCollection = new();
 
-			//2. Aggiunta dei servizi al contenitore di iniezione delle dipendenze con durata di vita
-			//limitata all'ambito della richiesta del cliente, cioè all'ambito della connessione
+			//2. Aggiunta dei servizi, inclusi gli store, al contenitore di iniezione delle dipendenze
+			//con durata di vita limitata all'ambito della richiesta del cliente, cioè all'ambito della connessione
 			serviceCollection.AddScoped<ValutazioneStore>();
 			serviceCollection.AddScoped<AlunnoStore>();
-			serviceCollection.AddScoped<DocenteService>();
+			serviceCollection.AddScoped<DocenteStore>();
 
 			serviceCollection.AddScoped<ValutazioneService>();
 			serviceCollection.AddScoped<AlunnoService>();
