@@ -13,9 +13,9 @@ namespace Es013.Services
 		private readonly AlunnoService _alunnoService;
 		private readonly ValutazioneService _valutazioneService;
 
-		public DocenteService(AlunnoService alunnoService, ValutazioneService valutazioneService)
+		public DocenteService(DocenteStore docenteStore, AlunnoService alunnoService, ValutazioneService valutazioneService)
 		{
-			_docenteStore = new();
+			_docenteStore = docenteStore;
 
 			_valutazioneService = valutazioneService;
 			_alunnoService = alunnoService;

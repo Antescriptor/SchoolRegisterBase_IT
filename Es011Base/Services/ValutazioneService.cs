@@ -11,9 +11,9 @@ namespace Es013.Services
 	public class ValutazioneService : IValutazioneService
 	{
 		private readonly ValutazioneStore _valutazioneStore;
-		public ValutazioneService()
+		public ValutazioneService(ValutazioneStore valutazioneStore)
 		{
-			_valutazioneStore = new();
+			_valutazioneStore = valutazioneStore;
 		}
 		public static decimal? CalcolaMedia(List<Valutazione> valutazioni, Alunno? alunno = null, uint? anno = null)
 		{

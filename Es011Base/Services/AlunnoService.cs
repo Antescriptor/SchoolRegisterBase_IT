@@ -12,9 +12,9 @@ namespace Es013.Services
 	{
 		private readonly AlunnoStore _alunnoStore;
 		private readonly ValutazioneService _valutazioneService;
-		public AlunnoService(ValutazioneService valutazioneService)
+		public AlunnoService(AlunnoStore alunnoStore, ValutazioneService valutazioneService)
 		{
-			_alunnoStore = new();
+			_alunnoStore = alunnoStore;
 			_valutazioneService = valutazioneService;
 		}
 		public void Menu(Alunno alunno)
